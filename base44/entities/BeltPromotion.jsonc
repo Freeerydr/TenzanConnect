@@ -1,0 +1,75 @@
+{
+  "name": "BeltPromotion",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User ID"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "belt": {
+      "type": "string",
+      "title": "Belt",
+      "enum": [
+        "white",
+        "grey_white",
+        "grey",
+        "grey_black",
+        "yellow_white",
+        "yellow",
+        "yellow_black",
+        "orange_white",
+        "orange",
+        "orange_black",
+        "green_white",
+        "green",
+        "green_black",
+        "blue",
+        "purple",
+        "brown",
+        "black"
+      ],
+      "default": "white"
+    },
+    "stripes": {
+      "type": "number",
+      "title": "Stripes",
+      "default": 0
+    },
+    "promotion_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Promotion Date"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "user_id",
+    "user_name",
+    "belt"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

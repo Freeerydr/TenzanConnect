@@ -1,0 +1,38 @@
+{
+  "name": "WeightLog",
+  "type": "object",
+  "properties": {
+    "weight": {
+      "type": "number",
+      "title": "Weight (lbs)"
+    },
+    "log_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes",
+      "description": "Conditioning or context notes"
+    }
+  },
+  "required": [
+    "weight",
+    "log_date"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

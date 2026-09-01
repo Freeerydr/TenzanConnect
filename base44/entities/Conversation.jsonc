@@ -1,0 +1,58 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "participant_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Participant IDs",
+      "description": "User IDs of the two participants"
+    },
+    "participant_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Participant Names",
+      "description": "Display names of the two participants"
+    },
+    "last_message": {
+      "type": "string",
+      "title": "Last Message",
+      "description": "Preview of the most recent message"
+    },
+    "last_message_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Message Date"
+    }
+  },
+  "required": [
+    "participant_ids",
+    "participant_names"
+  ],
+  "rls": {
+    "read": {
+      "data.participant_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.participant_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.participant_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

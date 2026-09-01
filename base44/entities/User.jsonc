@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "approved": {
+      "type": "boolean",
+      "title": "Approved",
+      "description": "Whether this member has been approved (invited) to access the app. New sign-ups default to false and see a waiting screen until an admin approves them.",
+      "default": false
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}

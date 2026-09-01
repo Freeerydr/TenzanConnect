@@ -1,0 +1,96 @@
+{
+  "name": "Achievement",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User ID"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "kind": {
+      "type": "string",
+      "title": "Kind",
+      "enum": [
+        "mat_hours",
+        "streak",
+        "competition_medal"
+      ],
+      "default": "mat_hours"
+    },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "icon": {
+      "type": "string",
+      "title": "Icon",
+      "description": "Emoji icon for milestone badges"
+    },
+    "threshold": {
+      "type": "number",
+      "title": "Threshold",
+      "description": "Milestone value for mat_hours / streak badges"
+    },
+    "earned_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Earned Date"
+    },
+    "competition_id": {
+      "type": "string",
+      "title": "Competition ID",
+      "description": "Links a competition_medal to its competition"
+    },
+    "competition_name": {
+      "type": "string",
+      "title": "Competition Name"
+    },
+    "placing": {
+      "type": "string",
+      "title": "Placing",
+      "enum": [
+        "gold",
+        "silver",
+        "bronze"
+      ]
+    },
+    "medal_shape": {
+      "type": "string",
+      "title": "Medal Shape",
+      "enum": [
+        "medal",
+        "star",
+        "lotus",
+        "laurel",
+        "shield",
+        "flame"
+      ],
+      "default": "medal"
+    }
+  },
+  "required": [
+    "user_id",
+    "kind",
+    "title",
+    "earned_date"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

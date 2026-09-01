@@ -1,0 +1,48 @@
+{
+  "name": "Connection",
+  "type": "object",
+  "properties": {
+    "follower_id": {
+      "type": "string",
+      "title": "Follower ID"
+    },
+    "following_id": {
+      "type": "string",
+      "title": "Following ID"
+    },
+    "follower_name": {
+      "type": "string",
+      "title": "Follower Name"
+    },
+    "following_name": {
+      "type": "string",
+      "title": "Following Name"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "follow",
+        "favorite"
+      ],
+      "default": "follow"
+    }
+  },
+  "required": [
+    "follower_id",
+    "following_id",
+    "type"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.follower_id": "{{user.id}}"
+    },
+    "update": {
+      "data.follower_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.follower_id": "{{user.id}}"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Goal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "What you're working toward"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "session_count",
+        "mat_hours",
+        "competition",
+        "custom"
+      ],
+      "default": "session_count"
+    },
+    "target": {
+      "type": "number",
+      "title": "Target"
+    },
+    "current": {
+      "type": "number",
+      "title": "Current Progress",
+      "default": 0
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date",
+      "title": "Deadline"
+    },
+    "completed": {
+      "type": "boolean",
+      "title": "Completed",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "EventRSVP",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "title": "Event ID"
+    },
+    "attendee_name": {
+      "type": "string",
+      "title": "Attendee Name"
+    }
+  },
+  "required": [
+    "event_id",
+    "attendee_name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

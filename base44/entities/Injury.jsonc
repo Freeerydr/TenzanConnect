@@ -1,0 +1,77 @@
+{
+  "name": "Injury",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "What happened"
+    },
+    "injury_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Injury Date"
+    },
+    "body_part": {
+      "type": "string",
+      "title": "Body Part"
+    },
+    "severity": {
+      "type": "string",
+      "title": "Severity",
+      "enum": [
+        "minor",
+        "moderate",
+        "major"
+      ],
+      "default": "minor"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "active",
+        "recovering",
+        "recovered"
+      ],
+      "default": "active"
+    },
+    "treatment": {
+      "type": "string",
+      "title": "Treatment",
+      "description": "What you're doing to recover"
+    },
+    "expected_return": {
+      "type": "string",
+      "format": "date",
+      "title": "Expected Return"
+    },
+    "resolved_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Resolved Date"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Recovery Notes"
+    }
+  },
+  "required": [
+    "title",
+    "injury_date"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

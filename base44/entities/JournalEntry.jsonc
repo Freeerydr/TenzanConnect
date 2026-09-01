@@ -1,0 +1,82 @@
+{
+  "name": "JournalEntry",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Short title for the session"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes",
+      "description": "Free-form notes about the session"
+    },
+    "techniques": {
+      "type": "string",
+      "title": "Techniques",
+      "description": "Techniques drilled or attempted"
+    },
+    "partners": {
+      "type": "string",
+      "title": "Sparring Partners",
+      "description": "Who you rolled with (comma-separated names)"
+    },
+    "intensity": {
+      "type": "string",
+      "title": "Intensity",
+      "enum": [
+        "light",
+        "moderate",
+        "hard",
+        "competition"
+      ],
+      "default": "moderate"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Duration (minutes)"
+    },
+    "mood": {
+      "type": "string",
+      "title": "Mood",
+      "enum": [
+        "great",
+        "good",
+        "neutral",
+        "tough",
+        "frustrated"
+      ],
+      "default": "good"
+    },
+    "training_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Training Date"
+    },
+    "ai_feedback": {
+      "type": "string",
+      "title": "AI Feedback",
+      "description": "AI-generated coaching feedback"
+    }
+  },
+  "required": [
+    "title",
+    "notes",
+    "training_date"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

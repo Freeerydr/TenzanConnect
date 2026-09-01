@@ -1,0 +1,57 @@
+{
+  "name": "QuoteOfTheWeek",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "title": "Quote",
+      "description": "The inspirational quote (legacy single-quote field; used as fallback when quotes array is empty)"
+    },
+    "author": {
+      "type": "string",
+      "title": "Author",
+      "description": "The athlete or martial artist who said it (legacy fallback)"
+    },
+    "quotes": {
+      "type": "array",
+      "title": "Quotes",
+      "description": "Up to 52 quotes that cycle weekly through a full 365-day year",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Quote"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          }
+        },
+        "required": [
+          "text",
+          "author"
+        ]
+      }
+    }
+  },
+  "required": [],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
