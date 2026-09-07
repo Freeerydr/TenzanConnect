@@ -1,77 +1,43 @@
-# Base44 Project
+# Tenzan Connect
 
-Use this repository to run and edit the app locally, then publish changes back through Base44.
+Member profiles, attendance, and communication for Tenzan Jiu-Jitsu.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+Originally built in Base44, now running independently on **Supabase**
+(database, auth, file storage) and **Netlify** (hosting). See
+`MIGRATION_NOTES.md` for the history of that migration and remaining
+follow-up items.
 
-## Prerequisites
+## Setup
 
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
-
-See the [Base44 CLI docs](https://docs.base44.com/developers/references/cli/get-started/overview) if you want to run Base44 commands directly.
-
-## Run Locally
-
-Run the full local development environment from the project root:
-
-```bash
-base44 dev
+```
+npm install
+cp .env.example .env.local
 ```
 
-`base44 dev` starts the local Base44 development backend and, when this app is configured for it, also starts the frontend dev server for you. Use the frontend URL printed by the command.
+Fill in `.env.local` with your Supabase project's URL and anon/public key
+(Supabase dashboard → Settings → API).
 
-For example, when the Base44 project config includes a `serveCommand`, `base44 dev` can launch the frontend too:
+## Local development
 
-```json5
-{
-  "site": {
-    "serveCommand": "npm run dev"
-  }
-}
 ```
-
-In a Base44 project this lives in `base44/config.jsonc`.
-
-## Run Only The Frontend
-
-If you only want to work on the frontend against the hosted Base44 backend, run:
-
-```bash
 npm run dev
 ```
 
-Open the local URL printed by Vite.
+## Database
 
-## Use The Hosted Backend
+The schema (tables + Row Level Security policies) lives in
+`supabase/schema.sql`. Run it in your Supabase project's SQL Editor to set
+up a fresh database.
 
-For frontend-only development, create or update `.env.local` in the project root:
+## Deployment
 
-```bash
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
-```
+This deploys to Netlify. Build settings live in `netlify.toml`. Set
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under Netlify's Site
+settings → Environment variables.
 
-`VITE_BASE44_APP_ID` identifies the Base44 app.
+## Project structure notes
 
-`VITE_BASE44_APP_BASE_URL` tells the Base44 Vite plugin where to send local `/api` requests. Point it at your deployed Base44 app URL when you want the local frontend to use the hosted backend.
-
-When you use `base44 dev`, the command injects the local Base44 values for you, so `.env.local` is mainly needed for frontend-only workflows.
-
-## Publish Your Changes
-
-After pushing your changes to git, open the Base44 dashboard and publish the app:
-
-```bash
-base44 dashboard open
-```
-
-## Docs & Support
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Base44 CLI command reference: [https://docs.base44.com/developers/references/cli/commands/introduction](https://docs.base44.com/developers/references/cli/commands/introduction)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+- `src/api/base44Client.js` — a compatibility shim, not the real Base44 SDK.
+  See `AGENTS.md` for why this exists and why it's intentional.
+- `legacy-schema-reference/entities/*.jsonc` — kept as reference documentation of the
+  original data model; not used at runtime.
