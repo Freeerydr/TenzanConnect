@@ -1,0 +1,86 @@
+{
+  "name": "Profile",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User ID"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "bio": {
+      "type": "string",
+      "title": "Bio",
+      "description": "Short bio about the athlete"
+    },
+    "avatar_url": {
+      "type": "string",
+      "title": "Avatar URL"
+    },
+    "belt": {
+      "type": "string",
+      "title": "Belt",
+      "enum": [
+        "white",
+        "grey_white",
+        "grey",
+        "grey_black",
+        "yellow_white",
+        "yellow",
+        "yellow_black",
+        "orange_white",
+        "orange",
+        "orange_black",
+        "green_white",
+        "green",
+        "green_black",
+        "blue",
+        "purple",
+        "brown",
+        "black"
+      ],
+      "default": "white"
+    },
+    "stripes": {
+      "type": "number",
+      "title": "Stripes",
+      "default": 0
+    },
+    "training_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "title": "Training Days",
+      "description": "Weekdays the member plans to consistently train",
+      "default": []
+    }
+  },
+  "required": [
+    "user_id",
+    "user_name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "CheckIn",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User ID"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "check_in_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Check-in Date"
+    }
+  },
+  "required": [
+    "user_id",
+    "check_in_date"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

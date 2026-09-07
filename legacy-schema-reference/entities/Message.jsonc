@@ -1,0 +1,75 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "title": "Conversation ID",
+      "description": "The conversation this message belongs to"
+    },
+    "content": {
+      "type": "string",
+      "title": "Content",
+      "description": "The message text"
+    },
+    "sender_id": {
+      "type": "string",
+      "title": "Sender ID"
+    },
+    "sender_name": {
+      "type": "string",
+      "title": "Sender Name"
+    },
+    "participant_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Participant IDs",
+      "description": "Denormalized from the conversation so read access can be scoped"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "content",
+    "sender_id",
+    "sender_name",
+    "participant_ids"
+  ],
+  "rls": {
+    "read": {
+      "data.participant_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.participant_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

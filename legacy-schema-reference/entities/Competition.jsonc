@@ -1,0 +1,89 @@
+{
+  "name": "Competition",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Competition Name",
+      "description": "The tournament or competition you're preparing for"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Event Date"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "weight_class": {
+      "type": "string",
+      "title": "Weight Class"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "planning",
+        "registered",
+        "training",
+        "completed"
+      ],
+      "default": "planning"
+    },
+    "focus_areas": {
+      "type": "string",
+      "title": "Focus Areas",
+      "description": "Game plan and techniques to drill for this competition"
+    },
+    "result": {
+      "type": "string",
+      "title": "Result",
+      "description": "Placing or outcome once completed"
+    },
+    "placing": {
+      "type": "string",
+      "title": "Placing",
+      "enum": [
+        "gold",
+        "silver",
+        "bronze"
+      ]
+    },
+    "medal_shape": {
+      "type": "string",
+      "title": "Medal Shape",
+      "description": "The shape of this tournament's medal, used for the achievement badge",
+      "enum": [
+        "medal",
+        "star",
+        "lotus",
+        "laurel",
+        "shield",
+        "flame"
+      ],
+      "default": "medal"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

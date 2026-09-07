@@ -1,0 +1,71 @@
+{
+  "name": "Roll",
+  "type": "object",
+  "properties": {
+    "training_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Training Date"
+    },
+    "partner_name": {
+      "type": "string",
+      "title": "Partner Name",
+      "description": "The opponent you rolled with"
+    },
+    "position": {
+      "type": "string",
+      "title": "Position",
+      "enum": [
+        "guard",
+        "passing",
+        "submissions",
+        "escapes",
+        "takedowns",
+        "defense",
+        "other"
+      ],
+      "default": "guard"
+    },
+    "submission": {
+      "type": "string",
+      "title": "Submission",
+      "description": "Submission attempted or hit (optional)"
+    },
+    "outcome": {
+      "type": "string",
+      "title": "Outcome",
+      "enum": [
+        "submitted",
+        "tapped",
+        "sweep",
+        "pass",
+        "advantage",
+        "neutral"
+      ],
+      "default": "neutral"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "training_date",
+    "partner_name",
+    "outcome"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "TechniqueOfTheWeek",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "The technique being highlighted this week"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "Focus points, when to use it, key details"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

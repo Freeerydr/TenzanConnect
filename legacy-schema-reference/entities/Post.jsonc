@@ -1,0 +1,101 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string",
+      "title": "Content",
+      "description": "The post text"
+    },
+    "author_name": {
+      "type": "string",
+      "title": "Author Name",
+      "description": "Display name of the author"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL",
+      "description": "Optional attached image"
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "description": "Post category",
+      "enum": [
+        "general",
+        "question",
+        "roll_report",
+        "technique",
+        "event",
+        "poll"
+      ],
+      "default": "general"
+    },
+    "poll_options": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Poll Options",
+      "description": "Options for poll posts"
+    },
+    "likes_count": {
+      "type": "number",
+      "title": "Likes Count",
+      "default": 0
+    },
+    "comments_count": {
+      "type": "number",
+      "title": "Comments Count",
+      "default": 0
+    },
+    "is_announcement": {
+      "type": "boolean",
+      "title": "Is Announcement",
+      "description": "Admin-pinned announcement shown at the top of the feed",
+      "default": false
+    },
+    "pinned": {
+      "type": "boolean",
+      "title": "Pinned",
+      "default": false
+    },
+    "event_id": {
+      "type": "string",
+      "title": "Event ID",
+      "description": "Links an event announcement post to its Event, so the post is removed when the event is deleted"
+    }
+  },
+  "required": [
+    "content",
+    "author_name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
