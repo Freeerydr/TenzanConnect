@@ -5,7 +5,7 @@ import BeltBadge from "@/components/BeltBadge";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import ProfileForm from "@/components/ProfileForm";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowLeft, Loader2, Award, Pencil, Star, UserPlus, UserCheck, Shield } from "lucide-react";
+import { ArrowLeft, Loader2, Award, Pencil, UserPlus, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SheetSelect from "@/components/SheetSelect";
 import { BELTS, BELT_COLOR, beltLabel } from "@/lib/belts";
@@ -15,7 +15,6 @@ export default function Members() {
   const [me, setMe] = useState(null);
   const [profiles, setProfiles] = useState([]);
   const [promos, setPromos] = useState([]);
-  const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [users, setUsers] = useState([]);
@@ -31,8 +30,7 @@ export default function Members() {
     Promise.all([
       base44.entities.Profile.list("-created_date", 200),
       base44.entities.BeltPromotion.list("-promotion_date", 500),
-      base44.entities.Connection.list("-created_date", 500),
-    ]).then(([p, pr, c]) => { setProfiles(p || []); setPromos(pr || []); setConnections(c || []); }).finally(() => setLoading(false));
+    ]).then(([p, pr]) => { setProfiles(p || []); setPromos(pr || []); }).finally(() => setLoading(false));
   }, []);
 
   const isAdmin = me?.role === "admin";
@@ -44,10 +42,6 @@ export default function Members() {
   });
 
   const myProfile = profiles.find((p) => p.user_id === me?.id);
-
-  const isFollowing = (uid) => connections.some((c) => c.follower_id === me?.id && c.following_id === uid && c.type === "follow");
-  const isFav = (uid) => connections.some((c) => c.follower_id === me?.id && c.following_id === uid && c.type === "favorite");
-  const followerCount = (uid) => connections.filter((c) => c.following_id === uid && c.type === "follow").length;
 
   const saveProfile = async (data) => {
     try {
@@ -62,25 +56,6 @@ export default function Members() {
     } catch { toast({ title: "Could not save profile", variant: "destructive" }); }
   };
 
-  const toggleConn = async (profile, type) => {
-    const existing = connections.find((c) => c.follower_id === me.id && c.following_id === profile.user_id && c.type === type);
-    try {
-      if (existing) {
-        await base44.entities.Connection.delete(existing.id);
-        setConnections((prev) => prev.filter((c) => c.id !== existing.id));
-      } else {
-        const c = await base44.entities.Connection.create({
-          follower_id: me.id,
-          following_id: profile.user_id,
-          follower_name: me.full_name || me.email || "Member",
-          following_name: profile.user_name,
-          type,
-        });
-        setConnections((prev) => [...prev, c]);
-      }
-    } catch { toast({ title: "Could not update", variant: "destructive" }); }
-  };
-
   const sendInvite = () => {
     const to = inviteEmail.trim();
     if (!to) { toast({ title: "Enter an email address", variant: "destructive" }); return; }
@@ -88,7 +63,7 @@ export default function Members() {
     const body = encodeURIComponent(
       "You've been invited to join Tenzan Connect — the Tenzan Jiu-Jitsu team hub.\n\n" +
       "Open this link on your phone to join the team:\n" +
-      "https://tenzan-connect.base44.app/register\n\n" +
+      "https://tenzan-connect.netlify.app/register\n\n" +
       "Tip: tap 'Continue with Google' for the fastest sign-up. " +
       "Once you're in, set up your profile and say hi on the feed!"
     );
@@ -284,37 +259,19 @@ export default function Members() {
             <div className="space-y-2.5">
               {profiles.filter((p) => p.user_id !== me?.id).map((profile) => {
                 const belt = beltByUser[profile.user_id];
-                const following = isFollowing(profile.user_id);
-                const fav = isFav(profile.user_id);
                 return (
-                  <div key={profile.id} className="glass-card p-3.5 flex items-center gap-3">
-                    <Link to={`/members/${profile.id}`} className="shrink-0 no-select">
+                  <Link key={profile.id} to={`/members/${profile.id}`} className="glass-card p-3.5 flex items-center gap-3 no-select hover:bg-foreground/5 transition-colors">
+                    <div className="shrink-0">
                       <ProfileAvatar profile={profile} />
-                    </Link>
-                    <Link to={`/members/${profile.id}`} className="flex-1 min-w-0 no-select">
+                    </div>
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-foreground truncate">{profile.user_name}</span>
                         <BeltBadge belt={belt?.belt || profile.belt} stripes={belt?.stripes || profile.stripes || 0} />
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{profile.bio || "No bio yet"}</p>
-                      <div className="text-[10px] text-muted-foreground mt-0.5">{followerCount(profile.user_id)} followers</div>
-                    </Link>
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <button
-                        onClick={() => toggleConn(profile, "favorite")}
-                        className={cn("w-8 h-8 rounded-full flex items-center justify-center no-select", fav ? "text-amber-500 bg-amber-500/10" : "text-muted-foreground bg-foreground/5")}
-                        aria-label="Favorite"
-                      >
-                        <Star className="w-4 h-4" fill={fav ? "currentColor" : "none"} />
-                      </button>
-                      <button
-                        onClick={() => toggleConn(profile, "follow")}
-                        className={cn("text-xs font-medium px-3 py-1.5 rounded-full no-select flex items-center gap-1", following ? "bg-emerald-500/15 text-emerald-700" : "bg-rose-600 text-white")}
-                      >
-                        {following ? <><UserCheck className="w-3 h-3" />Following</> : <><UserPlus className="w-3 h-3" />Follow</>}
-                      </button>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

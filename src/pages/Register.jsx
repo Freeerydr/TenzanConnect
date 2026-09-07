@@ -29,7 +29,15 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await base44.auth.register({ email, password });
+      const result = await base44.auth.register({ email, password });
+      if (result?.session) {
+        // Email confirmation is disabled on this project, so signUp() already
+        // returns an active session -- there's no code to verify. Skip
+        // straight to logged-in instead of showing a code screen that will
+        // never receive anything.
+        window.location.href = safeReturnTo();
+        return;
+      }
       setShowOtp(true);
     } catch (err) {
       setError(err.message || "Registration failed");
