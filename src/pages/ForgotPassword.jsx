@@ -37,9 +37,13 @@ export default function ForgotPassword() {
       }
     >
       {sent ? (
-        <p className="text-sm text-foreground text-center">
-          If an account exists with that email, you'll receive a password reset link shortly.
-        </p>
+        <div className="text-sm text-foreground text-center space-y-3">
+          <p>If an account exists with that email, you'll receive a password reset link shortly.</p>
+          <p className="text-muted-foreground text-xs">
+            Not seeing it after a few minutes? Email delivery is still being finalized —
+            contact Keith or Kristi directly and they can reset your password right away.
+          </p>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
