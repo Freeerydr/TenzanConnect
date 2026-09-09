@@ -5,8 +5,12 @@ const LOGO_URL = "https://media.base44.com/images/public/6a8519af96596fe0e3c1a6e
 
 export default function AuthLayout({ title, subtitle, footer, children }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
+      {/* py-12 + pb-10 below leave clear space at the bottom of the viewport
+          so the footer link ("Create one" / "Log in") never sits flush
+          against the very bottom edge, where a fixed-position badge
+          (e.g. Netlify's site badge, if enabled) could otherwise overlap it. */}
+      <div className="w-full max-w-md pb-10">
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden shadow-lg shadow-rose-500/20 mb-4">
             <Image src={LOGO_URL} fittingType="fill" className="w-full h-full scale-[1.35]" />

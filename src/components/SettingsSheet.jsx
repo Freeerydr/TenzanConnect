@@ -9,6 +9,11 @@ import { cn } from "@/lib/utils";
 import InstallApp from "@/components/InstallApp";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
+// Dark mode is temporarily disabled app-wide (see App.jsx's forcedTheme).
+// The toggle below is hidden rather than deleted so it's a one-line flip to
+// bring back once dark mode is revisited.
+const SHOW_DARK_MODE_TOGGLE = false;
+
 export default function SettingsSheet({ open, onClose }) {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -189,26 +194,28 @@ export default function SettingsSheet({ open, onClose }) {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-foreground/5">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-slate-500/15 flex items-center justify-center">
-                    <Moon className="w-4 h-4 text-slate-600" />
+              {SHOW_DARK_MODE_TOGGLE && (
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-foreground/5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-full bg-slate-500/15 flex items-center justify-center">
+                      <Moon className="w-4 h-4 text-slate-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-foreground">Dark mode</div>
+                      <div className="text-[11px] text-muted-foreground">Switch between light and dark theme</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-medium text-foreground">Dark mode</div>
-                    <div className="text-[11px] text-muted-foreground">Switch between light and dark theme</div>
-                  </div>
+                  <button
+                    onClick={toggleDark}
+                    className={cn(
+                      "w-11 h-6 rounded-full transition-colors relative no-select",
+                      dark ? "bg-slate-700" : "bg-foreground/20"
+                    )}
+                  >
+                    <span className={cn("absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all", dark ? "left-[1.375rem]" : "left-0.5")} />
+                  </button>
                 </div>
-                <button
-                  onClick={toggleDark}
-                  className={cn(
-                    "w-11 h-6 rounded-full transition-colors relative no-select",
-                    dark ? "bg-slate-700" : "bg-foreground/20"
-                  )}
-                >
-                  <span className={cn("absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all", dark ? "left-[1.375rem]" : "left-0.5")} />
-                </button>
-              </div>
+              )}
 
               <InstallApp />
 
@@ -332,7 +339,7 @@ export default function SettingsSheet({ open, onClose }) {
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-rose-600">Delete account?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This permanently deletes your profile and signs you out. Your posts and journal entries remain but become inaccessible. This action cannot be undone.
+                    This permanently deletes your account and everything tied to it — your profile, posts, journal entries, attendance history, and messages. This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

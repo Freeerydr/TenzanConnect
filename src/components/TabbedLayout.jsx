@@ -20,9 +20,9 @@ function tabForPath(path) {
 }
 
 const TAB_GRADIENTS = {
-  feed: "bg-gradient-to-b from-rose-50 via-white to-slate-100",
-  journal: "bg-gradient-to-b from-violet-50 via-white to-slate-100",
-  messages: "bg-gradient-to-b from-sky-50 via-white to-slate-100",
+  feed: "bg-gradient-to-b from-rose-50 via-white to-slate-100 dark:from-rose-950/40 dark:via-background dark:to-background",
+  journal: "bg-gradient-to-b from-violet-50 via-white to-slate-100 dark:from-violet-950/40 dark:via-background dark:to-background",
+  messages: "bg-gradient-to-b from-sky-50 via-white to-slate-100 dark:from-sky-950/40 dark:via-background dark:to-background",
 };
 
 const SPLIT_TRANSITION = { duration: 0.54, ease: [0.4, 0, 0.2, 1] };

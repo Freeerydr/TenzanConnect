@@ -157,7 +157,10 @@ export function createEntity(table) {
 
 // User entity maps to the user_roles table, exposing `id` as the auth user id.
 export function createUserEntity() {
-  const cols = "user_id as id, role, full_name, email, created_date";
+  // PostgREST's select() renames columns as "alias:column", not SQL's
+  // "column AS alias" — the SQL-style syntax below was silently invalid,
+  // which is why User.list/get/update all failed ("Cannot load members").
+  const cols = "id:user_id, role, full_name, email, created_date";
   return {
     async list(sort, limit) {
       let q = supabase.from("user_roles").select(cols);
@@ -187,6 +190,29 @@ export function createUserEntity() {
       return row;
     },
     async create() { throw new Error("User records cannot be created directly; invite users instead."); },
-    async delete() { throw new Error("User deletion is not supported from the client."); },
+    async delete(id) {
+      // Deleting an auth.users row always requires the service_role key,
+      // which can never run in the browser — this routes to one of two
+      // Edge Functions depending on who's being deleted:
+      //  - deleting yourself (Settings page)      -> delete-account
+      //  - an admin deleting another member        -> admin-delete-user
+      //    (this one also wipes all of that member's app data — posts,
+      //    attendance, journal entries, etc. — rather than leaving it
+      //    behind, since an admin-initiated removal is meant to be final.)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      if (user.id === id) {
+        const { data, error } = await supabase.functions.invoke("delete-account");
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+      } else {
+        const { data, error } = await supabase.functions.invoke("admin-delete-user", {
+          body: { targetUserId: id },
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+      }
+    },
   };
 }

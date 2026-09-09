@@ -39,10 +39,10 @@ export default function PostComposer({ onPosted }) {
   };
 
   const submit = async () => {
-    if (!content.trim()) return;
     const text = content.trim();
     const cat = category;
     const img = image_url;
+    if (!text && !img) return;
     const announce = isAdmin && isAnnouncement;
     const isPoll = cat === "poll";
     const cleanPollOptions = isPoll ? pollOptions.map((o) => o.trim()).filter(Boolean) : [];
@@ -106,7 +106,16 @@ export default function PostComposer({ onPosted }) {
         className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground resize-none outline-none"
       />
       {image_url && (
-        <img src={image_url} alt="preview" className="rounded-xl max-h-32 object-cover" />
+        <div className="relative inline-block">
+          <img src={image_url} alt="preview" className="rounded-xl max-h-32 object-cover" />
+          <button
+            onClick={() => setImageUrl("")}
+            className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-foreground text-background flex items-center justify-center shadow no-select"
+            aria-label="Remove image"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
       )}
 
       {category === "poll" && (
@@ -171,7 +180,7 @@ export default function PostComposer({ onPosted }) {
           </label>
           <button
             onClick={submit}
-            disabled={busy || !content.trim()}
+            disabled={busy || (!content.trim() && !image_url)}
             className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-rose-600 text-white disabled:opacity-40 hover:bg-rose-700 transition-colors no-select"
           >
             <Send className="w-3 h-3" />
