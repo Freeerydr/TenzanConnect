@@ -50,9 +50,10 @@ returns boolean
 language sql
 security definer
 stable
+set search_path = public
 as $$
   select exists(
-    select 1 from user_roles
+    select 1 from public.user_roles
     where user_id = auth.uid() and role = 'admin'
   );
 $$;
@@ -67,10 +68,10 @@ create policy "user_roles read" on user_roles
 -- ----------------------------------------------------------------------------
 
 create table if not exists posts (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   content text,
   author_name text,
   image_url text,
@@ -84,20 +85,20 @@ create table if not exists posts (
 );
 
 create table if not exists comments (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   content text,
   post_id text,
   author_name text
 );
 
 create table if not exists conversations (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   participant_ids text[],
   participant_names text[],
   last_message text,
@@ -105,10 +106,10 @@ create table if not exists conversations (
 );
 
 create table if not exists messages (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   conversation_id text,
   content text,
   sender_id text,
@@ -117,20 +118,20 @@ create table if not exists messages (
 );
 
 create table if not exists group_messages (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   group_id text,
   content text,
   author_name text
 );
 
 create table if not exists profiles (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   user_id text,
   user_name text,
   bio text,
@@ -141,10 +142,10 @@ create table if not exists profiles (
 );
 
 create table if not exists journal_entries (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   title text,
   notes text,
   techniques text,
@@ -157,10 +158,10 @@ create table if not exists journal_entries (
 );
 
 create table if not exists techniques (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   name text,
   status text default 'learning',
   category text default 'other',
@@ -168,10 +169,10 @@ create table if not exists techniques (
 );
 
 create table if not exists goals (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   title text,
   type text default 'session_count',
   target numeric,
@@ -181,19 +182,19 @@ create table if not exists goals (
 );
 
 create table if not exists partner_notes (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   name text,
   notes text
 );
 
 create table if not exists rolls (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   training_date date,
   partner_name text,
   position text default 'guard',
@@ -203,10 +204,10 @@ create table if not exists rolls (
 );
 
 create table if not exists competitions (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   name text,
   event_date date,
   location text,
@@ -220,10 +221,10 @@ create table if not exists competitions (
 );
 
 create table if not exists belt_promotions (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   user_id text,
   user_name text,
   belt text default 'white',
@@ -233,10 +234,10 @@ create table if not exists belt_promotions (
 );
 
 create table if not exists achievements (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   user_id text,
   user_name text,
   kind text default 'mat_hours',
@@ -252,20 +253,20 @@ create table if not exists achievements (
 );
 
 create table if not exists weight_logs (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   weight numeric,
   log_date date,
   notes text
 );
 
 create table if not exists injuries (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   title text,
   injury_date date,
   body_part text,
@@ -278,10 +279,10 @@ create table if not exists injuries (
 );
 
 create table if not exists attendance (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   user_id text,
   user_name text,
   session_date date,
@@ -289,20 +290,20 @@ create table if not exists attendance (
 );
 
 create table if not exists check_ins (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   user_id text,
   user_name text,
   check_in_date date
 );
 
 create table if not exists events (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   title text,
   description text,
   event_date timestamptz,
@@ -311,19 +312,19 @@ create table if not exists events (
 );
 
 create table if not exists event_rsvps (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   event_id text,
   attendee_name text
 );
 
 create table if not exists connections (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   follower_id text,
   following_id text,
   follower_name text,
@@ -332,33 +333,70 @@ create table if not exists connections (
 );
 
 create table if not exists poll_votes (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   post_id text,
   option_index integer
 );
 
 create table if not exists quotes_of_the_week (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   text text,
   author text,
   quotes jsonb
 );
 
 create table if not exists techniques_of_the_week (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   created_date timestamptz not null default now(),
   updated_date timestamptz not null default now(),
-  created_by_id uuid default auth.uid(),
+  created_by_id text default auth.uid()::text,
   title text,
   description text,
   image_url text
 );
+
+-- ----------------------------------------------------------------------------
+-- Migrate id / created_by_id from uuid -> text on tables that already exist
+-- (needed because 'create table if not exists' above is a no-op on tables
+-- created by an earlier run of this script, so their columns would otherwise
+-- stay uuid). Safe to re-run: altering a column that's already text is a no-op.
+-- Wrapped per-table in an exception handler: if one table hits a problem, it
+-- gets logged as a WARNING (with the real Postgres error) and the loop moves
+-- on to the next table, instead of the whole script aborting.
+-- ----------------------------------------------------------------------------
+do $$
+declare
+  t text;
+  err_msg text;
+  err_detail text;
+begin
+  for t in select unnest(array[
+    'posts','comments','conversations','messages','group_messages',
+    'profiles','journal_entries','techniques','goals','partner_notes','rolls',
+    'competitions','belt_promotions','achievements','weight_logs','injuries',
+    'attendance','check_ins','events','event_rsvps','connections','poll_votes',
+    'quotes_of_the_week','techniques_of_the_week'
+  ]) loop
+    begin
+      execute format('alter table %I alter column id drop default', t);
+      execute format('alter table %I alter column id type text using id::text', t);
+      execute format('alter table %I alter column id set default gen_random_uuid()::text', t);
+      execute format('alter table %I alter column created_by_id drop default', t);
+      execute format('alter table %I alter column created_by_id type text using created_by_id::text', t);
+      execute format('alter table %I alter column created_by_id set default auth.uid()::text', t);
+      raise notice 'OK: % converted', t;
+    exception when others then
+      get stacked diagnostics err_msg = message_text, err_detail = pg_exception_detail;
+      raise warning 'FAILED on table %: % | detail: %', t, err_msg, err_detail;
+    end;
+  end loop;
+end $$;
 
 -- ----------------------------------------------------------------------------
 -- updated_date triggers on all tables
@@ -412,56 +450,56 @@ alter table techniques_of_the_week enable row level security;
 -- Posts: public read/create; owner or admin can update/delete
 create policy "posts read"   on posts for select to authenticated using (true);
 create policy "posts create" on posts for insert to authenticated with check (true);
-create policy "posts update" on posts for update to authenticated using (created_by_id = auth.uid() or is_admin()) with check (created_by_id = auth.uid() or is_admin());
-create policy "posts delete" on posts for delete to authenticated using (created_by_id = auth.uid() or is_admin());
+create policy "posts update" on posts for update to authenticated using (created_by_id = auth.uid()::text or is_admin()) with check (created_by_id = auth.uid()::text or is_admin());
+create policy "posts delete" on posts for delete to authenticated using (created_by_id = auth.uid()::text or is_admin());
 
 -- Comments: public read/create; owner updates; owner or admin deletes
 create policy "comments read"   on comments for select to authenticated using (true);
 create policy "comments create" on comments for insert to authenticated with check (true);
-create policy "comments update" on comments for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "comments delete" on comments for delete to authenticated using (created_by_id = auth.uid() or is_admin());
+create policy "comments update" on comments for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "comments delete" on comments for delete to authenticated using (created_by_id = auth.uid()::text or is_admin());
 
 -- Conversations: only participants
 create policy "conversations read"   on conversations for select to authenticated using (auth.uid()::text = any(participant_ids));
 create policy "conversations create" on conversations for insert to authenticated with check (auth.uid()::text = any(participant_ids));
 create policy "conversations update" on conversations for update to authenticated using (auth.uid()::text = any(participant_ids)) with check (auth.uid()::text = any(participant_ids));
-create policy "conversations delete" on conversations for delete to authenticated using (created_by_id = auth.uid());
+create policy "conversations delete" on conversations for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Messages: only participants
 create policy "messages read"   on messages for select to authenticated using (auth.uid()::text = any(participant_ids));
 create policy "messages create" on messages for insert to authenticated with check (auth.uid()::text = any(participant_ids));
-create policy "messages update" on messages for update to authenticated using (created_by_id = auth.uid() or is_admin()) with check (true);
-create policy "messages delete" on messages for delete to authenticated using (created_by_id = auth.uid() or is_admin());
+create policy "messages update" on messages for update to authenticated using (created_by_id = auth.uid()::text or is_admin()) with check (true);
+create policy "messages delete" on messages for delete to authenticated using (created_by_id = auth.uid()::text or is_admin());
 
 -- Group messages: public read/create; owner or admin update/delete
 create policy "group_messages read"   on group_messages for select to authenticated using (true);
 create policy "group_messages create" on group_messages for insert to authenticated with check (true);
-create policy "group_messages update" on group_messages for update to authenticated using (created_by_id = auth.uid() or is_admin()) with check (true);
-create policy "group_messages delete" on group_messages for delete to authenticated using (created_by_id = auth.uid() or is_admin());
+create policy "group_messages update" on group_messages for update to authenticated using (created_by_id = auth.uid()::text or is_admin()) with check (true);
+create policy "group_messages delete" on group_messages for delete to authenticated using (created_by_id = auth.uid()::text or is_admin());
 
 -- Profiles: public read; owner creates/updates/deletes (scoped by user_id)
 create policy "profiles read"   on profiles for select to authenticated using (true);
 create policy "profiles create" on profiles for insert to authenticated with check (user_id = auth.uid()::text);
-create policy "profiles update" on profiles for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "profiles delete" on profiles for delete to authenticated using (created_by_id = auth.uid());
+create policy "profiles update" on profiles for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "profiles delete" on profiles for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Owner-only entities (journal, techniques, goals, partners, rolls, competitions, weight, injuries)
 create policy "journal_entries all owner" on journal_entries for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "techniques all owner" on techniques for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "goals all owner" on goals for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "partner_notes all owner" on partner_notes for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "rolls all owner" on rolls for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "competitions all owner" on competitions for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "weight_logs all owner" on weight_logs for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 create policy "injuries all owner" on injuries for all to authenticated
-  using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
+  using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
 
 -- Belt promotions: public read; admin-only write
 create policy "belt_promotions read"   on belt_promotions for select to authenticated using (true);
@@ -472,8 +510,8 @@ create policy "belt_promotions delete" on belt_promotions for delete to authenti
 -- Achievements: public read; owner creates/updates/deletes (scoped by user_id)
 create policy "achievements read"   on achievements for select to authenticated using (true);
 create policy "achievements create" on achievements for insert to authenticated with check (user_id = auth.uid()::text);
-create policy "achievements update" on achievements for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "achievements delete" on achievements for delete to authenticated using (created_by_id = auth.uid());
+create policy "achievements update" on achievements for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "achievements delete" on achievements for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Attendance: owner or admin read; owner or admin create; admin update/delete
 create policy "attendance read"   on attendance for select to authenticated using (user_id = auth.uid()::text or is_admin());
@@ -484,8 +522,8 @@ create policy "attendance delete" on attendance for delete to authenticated usin
 -- Check-ins: public read; owner creates/updates/deletes
 create policy "check_ins read"   on check_ins for select to authenticated using (true);
 create policy "check_ins create" on check_ins for insert to authenticated with check (user_id = auth.uid()::text);
-create policy "check_ins update" on check_ins for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "check_ins delete" on check_ins for delete to authenticated using (created_by_id = auth.uid());
+create policy "check_ins update" on check_ins for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "check_ins delete" on check_ins for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Events: public read; admin-only write
 create policy "events read"   on events for select to authenticated using (true);
@@ -496,8 +534,8 @@ create policy "events delete" on events for delete to authenticated using (is_ad
 -- Event RSVPs: public read; owner creates/updates/deletes
 create policy "event_rsvps read"   on event_rsvps for select to authenticated using (true);
 create policy "event_rsvps create" on event_rsvps for insert to authenticated with check (true);
-create policy "event_rsvps update" on event_rsvps for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "event_rsvps delete" on event_rsvps for delete to authenticated using (created_by_id = auth.uid());
+create policy "event_rsvps update" on event_rsvps for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "event_rsvps delete" on event_rsvps for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Connections: public read; follower creates/updates/deletes
 create policy "connections read"   on connections for select to authenticated using (true);
@@ -508,8 +546,8 @@ create policy "connections delete" on connections for delete to authenticated us
 -- Poll votes: public read; owner creates/updates/deletes
 create policy "poll_votes read"   on poll_votes for select to authenticated using (true);
 create policy "poll_votes create" on poll_votes for insert to authenticated with check (true);
-create policy "poll_votes update" on poll_votes for update to authenticated using (created_by_id = auth.uid()) with check (created_by_id = auth.uid());
-create policy "poll_votes delete" on poll_votes for delete to authenticated using (created_by_id = auth.uid());
+create policy "poll_votes update" on poll_votes for update to authenticated using (created_by_id = auth.uid()::text) with check (created_by_id = auth.uid()::text);
+create policy "poll_votes delete" on poll_votes for delete to authenticated using (created_by_id = auth.uid()::text);
 
 -- Quotes of the week: public read; admin-only write
 create policy "quotes_of_the_week read"   on quotes_of_the_week for select to authenticated using (true);
@@ -530,9 +568,10 @@ create or replace function handle_new_user()
 returns trigger
 language plpgsql
 security definer
+set search_path = public
 as $$
 begin
-  insert into user_roles (user_id, role, full_name, email)
+  insert into public.user_roles (user_id, role, full_name, email)
   values (new.id, 'user', new.raw_user_meta_data->>'full_name', new.email)
   on conflict (user_id) do nothing;
   return new;
